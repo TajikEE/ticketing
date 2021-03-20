@@ -1,3 +1,4 @@
-docker build:
-docker build -t ticketing-frontend .
-docker run -it -p 8080:80 --rm --name ticketing-frontend ticketing-frontend
+To start with Docker, use the following commands:
+
+1. make build
+2. make run

@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  server:
+    image: ticketing-backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    networks:
+      - ticketing
+
+  frontend:
+    image: ticketing-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - server
+    networks:
+      - ticketing
+
+  mongo:
+    image: mongo:3.6.19-xenial
+    ports:
+      - "27017:27017"
+    networks:
+      - ticketing
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  ticketing:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    driver: local

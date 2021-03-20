@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "ticketing backend",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "nodemon -r esm src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "express": "^4.17.1",

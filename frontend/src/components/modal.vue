@@ -1,16 +1,21 @@
 <template>
   <transition name="modal">
-    <div v-if="show" :class="$style.mask" @click="$emit('close')">
+    <div v-if="show" :class="$style.mask" @click="close">
       <div :class="$style.container" class="modal-container" @click.stop>
         <div :class="$style.header">
           Create a ticket
         </div>
 
-        <button :class="$style.close" @click="$emit('close')">
+        <button :class="$style.close" @click="close">
           X
         </button>
 
         <el-form>
+          <el-form-item>
+            <label>Email</label>
+            <el-input v-model="email" placeholder="Email"></el-input>
+          </el-form-item>
+
           <el-form-item>
             <label>Title</label>
             <el-input v-model="title" placeholder="Title"></el-input>
@@ -65,7 +70,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="create">Create task</el-button>
+            <el-button type="primary" @click="create">Create ticket</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -76,49 +81,59 @@
 <script>
 import Vue from "vue";
 import { mapActions } from "vuex";
-
-const PRIORITIES = [
-  { label: "Lowest", value: "LOWEST" },
-  { label: "Low", value: "LOW" },
-  { label: "Medium", value: "MEDIUM" },
-  { label: "High", value: "HIGH" },
-  { label: "Highest", value: "HiGHEST" },
-];
-
-const STATUSES = [
-  { label: "Open", value: "OPEN" },
-  { label: "In progress", value: "IN_PROGRESS" },
-  { label: "Closed", value: "CLOSED" },
-];
+import { PRIORITIES, STATUSES } from "../helpers/constants";
 
 export default Vue.extend({
   props: {
     show: { type: Boolean, default: false },
   },
 
-  data: () => ({
-    PRIORITIES,
-    STATUSES,
+  computed: {
+    PRIORITIES: () => PRIORITIES,
+    STATUSES: () => STATUSES,
+  },
 
+  data: () => ({
+    email: "",
     title: "",
     description: "",
     dueDate: "",
-    status: "",
-    priority: "",
+    status: null,
+    priority: null,
   }),
 
   methods: {
     ...mapActions(["createTicket"]),
 
+    clear() {
+      this.email = "";
+      this.title = "";
+      this.description = "";
+      this.dueDate = "";
+      this.status = null;
+      this.priority = null;
+    },
+
+    close() {
+      this.$emit("close");
+
+      this.clear();
+    },
+
     async create() {
       const ticket = {
+        email: this.email,
         title: this.title,
         description: this.description,
         dueDate: this.dueDate,
         status: this.status,
         priority: this.priority,
       };
+
       await this.createTicket(ticket);
+
+      this.$emit("close");
+      this.clear();
     },
   },
 });
