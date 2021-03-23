@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon -r esm src/index.js",
-    "test": "jest --config ./jest.config.json",
+    "test": "jest --config ./jest.config.js",
     "test:watch": "npm run test -- --watch"
   },
   "author": "Tajik Ifrad",
   "license": "ISC",
   "dependencies": {
+    "@shelf/jest-mongodb": "^1.2.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

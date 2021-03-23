@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" @click="showModal = true"
+    <el-button ref="createTicketBtn" type="primary" @click="showModal = true"
       >Create ticket</el-button
     >
 
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div v-for="ticket in sortedTickets" :key="ticket._id">
+    <div ref="table" v-for="ticket in sortedTickets" :key="ticket._id">
       <TableItem :ticket="ticket" />
     </div>
 
