@@ -11,7 +11,9 @@ export default new Vuex.Store({
     tickets: [],
     ticket: null,
     isSidebarOpen: false,
+    error: false,
   },
+
   mutations: {
     SET_TICKETS(state, tickets) {
       state.tickets = [...tickets];
@@ -25,6 +27,10 @@ export default new Vuex.Store({
       state.ticket = ticket;
     },
 
+    SET_ERROR(state, error) {
+      state.error = error;
+    },
+
     DELETE_TICKET(state, id) {
       const ticketIndex = state.tickets.findIndex(
         (ticket) => ticket._id === id
@@ -35,24 +41,30 @@ export default new Vuex.Store({
       state.tickets.splice(ticketIndex, 1);
     },
   },
+
   actions: {
     async createTicket({ commit }, ticketData) {
-      const { data } = await axios.post("/create", {
-        email: ticketData.email,
-        title: ticketData.title,
-        description: ticketData.description,
-        dueDate: ticketData.dueDate,
-        status: ticketData.status,
-        priority: ticketData.priority,
-      });
+      try {
+        commit("SET_ERROR", false);
+        const { data } = await axios.post("/ticket", {
+          email: ticketData.email,
+          title: ticketData.title,
+          description: ticketData.description,
+          dueDate: ticketData.dueDate,
+          status: ticketData.status,
+          priority: ticketData.priority,
+        });
 
-      commit("NEW_TICKET", data.newTicket);
+        commit("NEW_TICKET", data);
+      } catch (ex) {
+        commit("SET_ERROR", ex);
+      }
     },
 
     async getTicket({ commit }, id) {
       const { data } = await axios.get(`/ticket/${id}`);
 
-      commit("SET_TICKET", data.ticket);
+      commit("SET_TICKET", data);
     },
 
     async updateTicket({ commit, dispatch }, ticket) {
@@ -69,7 +81,7 @@ export default new Vuex.Store({
     async getTicketList({ commit }) {
       const { data } = await axios.get("/tickets");
 
-      commit("SET_TICKETS", data.tickets);
+      commit("SET_TICKETS", data);
     },
 
     async deleteTicket({ commit }, id) {
@@ -78,6 +90,7 @@ export default new Vuex.Store({
       await axios.delete(`/ticket/${id}`);
     },
   },
+
   getters: {
     getTicketByIdGetter: (state) => (id) =>
       state.tickets.find((ticket) => ticket._id === id),

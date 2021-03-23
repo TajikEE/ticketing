@@ -10,6 +10,8 @@
           X
         </button>
 
+        <el-alert v-if="error" :title="error" type="error"> </el-alert>
+
         <el-form>
           <el-form-item>
             <label>Email</label>
@@ -80,7 +82,7 @@
 
 <script>
 import Vue from "vue";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { PRIORITIES, STATUSES } from "../helpers/constants";
 
 export default Vue.extend({
@@ -89,6 +91,8 @@ export default Vue.extend({
   },
 
   computed: {
+    ...mapState(["error"]),
+
     PRIORITIES: () => PRIORITIES,
     STATUSES: () => STATUSES,
   },
@@ -132,6 +136,7 @@ export default Vue.extend({
 
       await this.createTicket(ticket);
 
+      if (this.error !== false) return;
       this.$emit("close");
       this.clear();
     },
