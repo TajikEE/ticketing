@@ -1,4 +1,11 @@
 To start with Docker, use the following commands:
 
-1. make build
-2. make run
+- make build
+- make run
+
+Test server commands:
+npm run test
+
+Test frontend commands:
+npm run test:unit
+npm run test:e2e
